@@ -1,13 +1,13 @@
 package android.eservices.webrequests.data.di;
 
 import android.content.Context;
-import android.eservices.webrequests.data.api.BookDisplayService;
+import android.eservices.webrequests.data.api.BooksService;
 import android.eservices.webrequests.data.db.BookDatabase;
+import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayRemoteDataSource;
 import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayDataRepository;
-import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayRepository;
-import android.eservices.webrequests.data.repository.bookdisplay.local.BookDisplayLocalDataSource;
-import android.eservices.webrequests.data.repository.bookdisplay.mapper.BookToBookEntityMapper;
-import android.eservices.webrequests.data.repository.bookdisplay.remote.BookDisplayRemoteDataSource;
+//import android.eservices.webrequests.data.repository.bookdisplay.local.BookDisplayLocalDataSource;
+//import android.eservices.webrequests.data.repository.bookdisplay.mapper.BookToBookEntityMapper;
+//import android.eservices.webrequests.data.repository.bookdisplay.remote.BookDisplayRemoteDataSource;
 import android.eservices.webrequests.presentation.viewmodel.ViewModelFactory;
 
 import androidx.room.Room;
@@ -31,10 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class FakeDependencyInjection {
 
-    private static BookDisplayService bookDisplayService;
+    private static BooksService booksService;
     private static Retrofit retrofit;
     private static Gson gson;
-    private static BookDisplayRepository bookDisplayRepository;
+    private static BookDisplayDataRepository bookDisplayRepository;
     private static BookDatabase bookDatabase;
     private static Context applicationContext;
     private static ViewModelFactory viewModelFactory;
@@ -47,22 +47,22 @@ public class FakeDependencyInjection {
     }
 
 
-    public static BookDisplayRepository getBookDisplayRepository() {
+    public static BookDisplayDataRepository getBookDisplayRepository() {
         if (bookDisplayRepository == null) {
             bookDisplayRepository = new BookDisplayDataRepository(
-                    new BookDisplayLocalDataSource(getBookDatabase()),
-                    new BookDisplayRemoteDataSource(getBookDisplayService()),
-                    new BookToBookEntityMapper()
+                   // new BookDisplayLocalDataSource(getBookDatabase()),
+                    new BookDisplayRemoteDataSource(getBookDisplayService())
+                    //new BookToBookEntityMapper()
             );
         }
         return bookDisplayRepository;
     }
 
-    public static BookDisplayService getBookDisplayService() {
-        if (bookDisplayService == null) {
-            bookDisplayService = getRetrofit().create(BookDisplayService.class);
+    public static BooksService getBookDisplayService() {
+        if (booksService == null) {
+            booksService = getRetrofit().create(BooksService.class);
         }
-        return bookDisplayService;
+        return booksService;
     }
 
     public static Retrofit getRetrofit() {
@@ -84,6 +84,7 @@ public class FakeDependencyInjection {
         return retrofit;
     }
 
+
     public static Gson getGson() {
         if (gson == null) {
             gson = new Gson();
@@ -96,10 +97,10 @@ public class FakeDependencyInjection {
     }
 
     public static BookDatabase getBookDatabase() {
-        if (bookDatabase == null) {
-            bookDatabase = Room.databaseBuilder(applicationContext,
-                    BookDatabase.class, "book-database").build();
-        }
+        if (bookDatabase == null)
+            bookDatabase = Room.databaseBuilder(applicationContext,BookDatabase.class,"favortitesBook").build();
         return bookDatabase;
     }
+
+
 }

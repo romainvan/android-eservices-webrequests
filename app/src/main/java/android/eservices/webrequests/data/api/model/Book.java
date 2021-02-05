@@ -21,4 +21,16 @@ public class Book {
     public boolean isFavorite() {
         return isFavorite;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setVolumeInfo(BookInfo volumeInfo) {
+        this.volumeInfo = volumeInfo;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 }
